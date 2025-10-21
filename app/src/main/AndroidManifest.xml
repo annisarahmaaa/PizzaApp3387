@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PizzaApp3387">
         <activity
+            android:name=".MenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Menu"
+            android:exported="false" />
+        <activity
             android:name=".AccountActivity"
             android:exported="false" />
         <activity
