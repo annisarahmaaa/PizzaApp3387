@@ -1,10 +1,12 @@
-package com.example.pizzaapp3383
+package com.example.pizzaapp3387
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -13,10 +15,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ReportFragment.newInstance] factory method to
+ * Use the [MenuFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ReportFragment : Fragment() {
+class MenuFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -34,7 +36,27 @@ class ReportFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_report, container, false)
+        return inflater.inflate(R.layout.fragment_menu, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // add data to recyclerViewMenu
+        val rvMenu = view.findViewById<RecyclerView>(R.id.recyclerViewMenu)
+        rvMenu.layoutManager = GridLayoutManager(activity, 2)
+
+        // add data
+        val menu = ArrayList<MenuModel>()
+        menu.add(MenuModel(R.drawable.logo_pizza, "Pizza 1", "100.000"))
+        menu.add(MenuModel(R.drawable.logo_pizza, "Pizza 2", "200.000"))
+        menu.add(MenuModel(R.drawable.logo_pizza, "Pizza 3", "300.000"))
+        menu.add(MenuModel(R.drawable.logo_pizza, "Pizza 4", "400.000"))
+
+        // set adapter
+        val adapter = AdaptorMenu(menu)
+        rvMenu.adapter = adapter
+
     }
 
     companion object {
@@ -44,12 +66,12 @@ class ReportFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment ReportFragment.
+         * @return A new instance of fragment MenuFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            ReportFragment().apply {
+            MenuFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
