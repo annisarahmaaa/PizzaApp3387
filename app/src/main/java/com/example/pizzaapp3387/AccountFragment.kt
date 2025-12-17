@@ -5,6 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+
+private val AccountFragment.buttonSave: Any
+private var AccountFragment.notificationManager: NotificationManagerCompat
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,7 +23,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class AccountFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
@@ -37,6 +42,19 @@ class AccountFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_account, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        notificationManager = NotificationManagerCompat.from(view.context)
+
+        val buttonSave = view.findViewById<Button>(R.id.buttonSave)
+        buttonSave.setOnClickListener {
+            val title = "Change Account"
+            val message = " You have changed your account data"
+            val builder = NotificationCompat.Builder(view.context, BaseApplication.CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.outline_account_circle_24)
+        }
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of
