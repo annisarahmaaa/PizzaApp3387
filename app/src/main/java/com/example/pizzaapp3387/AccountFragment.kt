@@ -9,8 +9,7 @@ import android.widget.Button
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
-private val AccountFragment.buttonSave: Any
-private var AccountFragment.notificationManager: NotificationManagerCompat
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,7 +44,7 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        notificationManager = NotificationManagerCompat.from(view.context)
+        //notificationManager = NotificationManagerCompat.from(view.context)
 
         val buttonSave = view.findViewById<Button>(R.id.buttonSave)
         buttonSave.setOnClickListener {

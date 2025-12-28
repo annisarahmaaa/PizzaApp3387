@@ -9,33 +9,78 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.pizzaapp3387.client.RetrofitClient
+import com.example.pizzaapp3387.response.account.LoginResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
+
+        // Mengatur padding untuk sistem bar (status bar/navigasi)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        // 1. Inisialisasi UI (Hubungkan variabel dengan ID di XML)
         val txtUsername: EditText = findViewById(R.id.editTextUsername)
         val txtPassword: EditText = findViewById(R.id.editTextPassword)
-        val btnLogin: Button = findViewById(R.id.buttonNext)
-        val Username = "awan"
-        val Password = "123"
+        val btnLogin: Button = findViewById(R.id.buttonLogin)
 
+        // 2. Event Klik Tombol Login
         btnLogin.setOnClickListener {
-//            val intentAccount = Intent(this, AccountActivity::class.java)
-//            startActivity(intentAccount)
-            if(txtUsername.text.toString().equals(Username) && txtPassword.text.toString().equals(Password)) {
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Login failed, Check your email and password", Toast.LENGTH_SHORT).show()
+            // Ambil teks dari inputan dan hapus spasi di awal/akhir (trim)
+            val user = txtUsername.text.toString().trim()
+            val pwd = txtPassword.text.toString().trim()
+
+            // --- VALIDASI: Cek apakah input kosong ---
+            if (user.isEmpty()) {
+                txtUsername.error = "Email required"
+                txtUsername.requestFocus()
+                return@setOnClickListener
             }
+            if (pwd.isEmpty()) {
+                txtPassword.error = "Password required"
+                txtPassword.requestFocus()
+                return@setOnClickListener
+            }
+
+            // --- RETROFIT: Melakukan Request Login ke Server ---
+            // ... (Kode di atasnya biarkan saja)
+
+            // --- RETROFIT: Melakukan Request Login ke Server ---
+            RetrofitClient.instance.postLogin(user, pwd).enqueue(object : Callback<LoginResponse> {
+
+                // Perbaikan 1: Tambahkan tanda tanya (?) pada Call dan Response
+                override fun onResponse(call: Call<LoginResponse>?, response: Response<LoginResponse>?) {
+
+                    // Perbaikan 2: Pakai tanda tanya (?) sebelum .body()
+                    val account = response?.body()
+
+                    // Perbaikan 3: Ubah 'succes' jadi 'success' (double s)
+                    if (account?.success == true) {
+                        Toast.makeText(this@LoginActivity, account.message, Toast.LENGTH_SHORT).show()
+
+                        val intentLogin = Intent(this@LoginActivity, AccountActivity::class.java)
+                        startActivity(intentLogin)
+                        finish()
+                    } else {
+                        Toast.makeText(this@LoginActivity, account?.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                // Perbaikan 4: Tambahkan tanda tanya (?) pada Call dan Throwable
+                override fun onFailure(call: Call<LoginResponse>?, t: Throwable?) {
+                    Toast.makeText(applicationContext, "Error: ${t?.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+
         }
     }
 }
