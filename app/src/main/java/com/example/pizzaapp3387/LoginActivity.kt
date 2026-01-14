@@ -14,15 +14,21 @@ import com.example.pizzaapp3387.response.account.LoginResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.example.pizzaapp3387.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         // Mengatur padding untuk sistem bar (status bar/navigasi)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets -> // Use binding.root
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -34,20 +40,20 @@ class LoginActivity : AppCompatActivity() {
         val btnLogin: Button = findViewById(R.id.buttonLogin)
 
         // 2. Event Klik Tombol Login
-        btnLogin.setOnClickListener {
+        binding.buttonLogin.setOnClickListener {
             // Ambil teks dari inputan dan hapus spasi di awal/akhir (trim)
-            val user = txtUsername.text.toString().trim()
-            val pwd = txtPassword.text.toString().trim()
+            val user = binding.editTextUsername.text.toString().trim()
+            val pwd = binding.editTextPassword.text.toString().trim()
 
             // --- VALIDASI: Cek apakah input kosong ---
             if (user.isEmpty()) {
-                txtUsername.error = "Email required"
-                txtUsername.requestFocus()
+                binding.editTextUsername.error = "Email required"
+                binding.editTextUsername.requestFocus()
                 return@setOnClickListener
             }
             if (pwd.isEmpty()) {
-                txtPassword.error = "Password required"
-                txtPassword.requestFocus()
+                binding.editTextPassword.error = "Password required"
+                binding.editTextPassword.requestFocus()
                 return@setOnClickListener
             }
 
@@ -67,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                     if (account?.success == true) {
                         Toast.makeText(this@LoginActivity, account.message, Toast.LENGTH_SHORT).show()
 
-                        val intentLogin = Intent(this@LoginActivity, AccountActivity::class.java)
+                        val intentLogin = Intent(this@LoginActivity, HomeActivity::class.java)
                         startActivity(intentLogin)
                         finish()
                     } else {
